@@ -1,14 +1,29 @@
-import EditorLink from './EditorLink';
+import React, { useState, useEffect, useMemo } from 'react';
+import { FormLayout, FormItem } from './Form';
+import { StaticLookupSelect } from './Form/Controls';
+import Entity from './Entity';
 
 const AppointmentForm = () => {
+  const [timeSlotsEntity, setEntityRef] = useState(null);
+
+  useEffect(() => {
+    timeSlotsEntity?.get();
+  }, []);
+  // const;
   return (
-    <div>
-      Edit{' '}
-      <EditorLink path="src/components/AppointmentForm.tsx">
-        "src/components/AppointmentForm.tsx"
-      </EditorLink>{' '}
-      to implement Appointment form feature.
-    </div>
+    <Entity
+      storeId="Time-Slots"
+      entityRef={(ref) => setEntityRef(ref)}
+      render={(store) => (
+        <FormLayout loading={store.loading}>
+          <FormItem>
+            <StaticLookupSelect label="Name" />
+          </FormItem>
+          <FormItem>2</FormItem>
+          <FormItem>3</FormItem>
+        </FormLayout>
+      )}
+    />
   );
 };
 

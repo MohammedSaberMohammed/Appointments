@@ -1,0 +1,33 @@
+.loader-root {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 !important
+};
+
+.loader-inMiddle {
+  margin: 50vh auto !important;
+};
+
+.loader-inline {
+  justify-content: flex-start;
+};
+
+.loader-icon {
+  width: 40px !important;
+  margin-right: 10px !important;
+};
+
+.loader-small-icon {
+  width: 20px !important
+};
+
+.loader-noText {
+  margin-right: 0
+};
+
+.loader-small {
+  // & $loadingIcon: {
+  //   width: 20;
+  // }
+};

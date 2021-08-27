@@ -2,7 +2,7 @@ import { createMuiTheme, ThemeProvider } from '@material-ui/core';
 import { Layout } from 'components/Layout';
 import { Provider } from 'react-redux';
 import store from 'store';
-import 'styles/styles.scss';
+import 'styles/main.scss';
 
 const theme = createMuiTheme({
   palette: {

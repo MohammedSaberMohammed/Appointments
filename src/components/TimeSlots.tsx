@@ -7,7 +7,7 @@ const getTimeSlotDatacy = (id: string) => `timeslot-${id}`;
 
 const TimeSlots = (props) => {
   const { items } = props;
-
+  console.log('time Slots', items);
   return (
     <List className="timeSlots" datacy="timeslot-list">
       {items.map((item) => (

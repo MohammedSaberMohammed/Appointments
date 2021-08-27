@@ -1,20 +1,31 @@
+import React, { useState, useEffect, useMemo } from 'react';
+// MUI
 import { Link } from '@material-ui/core';
+// Components
 import EditorLink from 'components/EditorLink';
 import TimeSlots from 'components/TimeSlots';
 import Section from 'components/Section';
-import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { getTimeSlots, timeslotsSelectors } from 'store/timeslots';
+import Entity from 'components/Entity';
+import { FormLayout, FormItem } from 'components/Form';
 
 const TimeSlotPage = () => {
-  const dispatch = useDispatch();
-  const timeslots = useSelector((state) =>
-    timeslotsSelectors.selectAll(state.timeslots),
-  );
+  const [timeSlotsEntity, setEntityRef] = useState(null);
+  const [timeSlots, setTimeSlots] = useState([]);
 
   useEffect(() => {
-    dispatch(getTimeSlots());
-  }, []);
+    timeSlotsEntity?.get();
+  }, [timeSlotsEntity]);
+
+  const onEntityReceived = (slots) => {
+    setTimeSlots(slots);
+  };
+
+  const sortedTimeSlots = useMemo(() => {
+    return timeSlots.sort(
+      (a, b) =>
+        new Date(a.startDate).getTime() - new Date(b.startDate).getTime(),
+    );
+  }, [timeSlots]);
 
   return (
     <div className="page">
@@ -161,13 +172,25 @@ const TimeSlotPage = () => {
           </section>
         </article>
       </section>
-      <Section
-        name="timeslots"
-        title="TimeSlot List"
-        className="timeSlot__list"
-      >
-        <TimeSlots items={timeslots} />
-      </Section>
+
+      <Entity
+        storeId="Time-Slots"
+        entityRef={(ref) => setEntityRef(ref)}
+        onEntityReceived={onEntityReceived}
+        render={(store) => (
+          <FormLayout loading={store.loading}>
+            <FormItem fullWidth>
+              <Section
+                name="timeslots"
+                title="TimeSlot List"
+                className="timeSlot__list"
+              >
+                <TimeSlots items={sortedTimeSlots} />
+              </Section>
+            </FormItem>
+          </FormLayout>
+        )}
+      />
     </div>
   );
 };
