@@ -1,9 +1,15 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import classNames from 'classnames';
+import Immutable from 'seamless-immutable';
 
 import Image from 'next/image';
+
+// Actions
+import LookupsActions from '../../../store/ActionsAndReducers/Lookups';
 // Lodash
+import get from 'lodash/get';
 import find from 'lodash/find';
 // Select
 import Select, { components } from 'react-select';
@@ -29,16 +35,38 @@ const CaretDownIcon = (props) => {
 };
 
 /**
- * StaticLookupSelect Component
+ * LookupSelectControl Component
  * @augments {Component<Props, State>}
  */
-class StaticLookupSelect extends Component {
+class LookupSelectControl extends React.Component {
+  componentDidMount() {
+    this.init();
+  }
+
+  componentDidUpdate(prevProps) {
+    const { lookup } = this.props;
+
+    if (lookup !== prevProps.lookup) {
+      this.init();
+    }
+  }
+
+  init() {
+    const { lookups, lookup } = this.props;
+    const loaded = get(lookups, `${lookup}.loaded`, false);
+    const loading = get(lookups, `${lookup}.loading`, false);
+
+    if (!loaded && !loading) {
+      this.props.loadLookup(lookup);
+    }
+  }
+
   handleChangeSelection = (selectedValue) => {
     const { name, onChange, optionValue } = this.props;
     const fieldValue = selectedValue ? selectedValue[optionValue] : '';
 
     if (name) {
-      return onChange(name, fieldValue, selectedValue || {});
+      return onChange(name, fieldValue);
     }
 
     return onChange(fieldValue);
@@ -51,6 +79,19 @@ class StaticLookupSelect extends Component {
       </components.DropdownIndicator>
     );
   };
+
+  get value() {
+    const { value, optionValue } = this.props;
+
+    const defaultValue = find(this.lookupData, [`${optionValue}`, value]);
+    return defaultValue;
+  }
+
+  get lookupData() {
+    const { lookup, lookups } = this.props;
+
+    return get(lookups, `${lookup}.data`, []);
+  }
 
   ValueContainer = ({ children, ...props }) => {
     const { rightAdornment } = this.props;
@@ -68,18 +109,8 @@ class StaticLookupSelect extends Component {
     );
   };
 
-  get value() {
-    const { value, lookup, optionValue } = this.props;
-
-    const defaultValue = find(lookup, [`${optionValue}`, value]);
-
-    return defaultValue || null;
-  }
-
   get selectStyles() {
-    const { rightAdornment, styles } = this.props;
-    const { controle, placeholder, singleValue } = styles || {};
-
+    const { rightAdornment } = this.props;
     return {
       menu: (provided) => ({
         ...provided,
@@ -104,6 +135,7 @@ class StaticLookupSelect extends Component {
         };
       },
       control: (provided) => ({
+        // none of react-select's styles are passed to <Control />
         ...provided,
         height: '45px',
         borderRadius: '30px',
@@ -117,38 +149,18 @@ class StaticLookupSelect extends Component {
         ':focus': {
           height: '45px',
         },
-        ...controle,
-      }),
-      placeholder: (provided) => ({
-        ...provided,
-        ...placeholder,
-      }),
-      singleValue: (provided, state) => {
-        const opacity = state.isDisabled ? 0.5 : 1;
-        const transition = 'opacity 300ms';
-
-        return {
-          ...provided,
-          opacity,
-          transition,
-          ...singleValue,
-        };
-      },
-      input: () => ({
-        paddingRight: 0,
       }),
     };
   }
 
   render() {
     const {
-      rtl,
       id,
+      rtl,
       name,
       error,
       multi,
       label,
-      lookup,
       loading,
       required,
       disabled,
@@ -162,6 +174,7 @@ class StaticLookupSelect extends Component {
       noOptionsMessage,
       hideSelectedOptions,
       rightAdornment,
+      asCallbackOptionLabel,
     } = this.props;
 
     return (
@@ -177,11 +190,11 @@ class StaticLookupSelect extends Component {
         )}
 
         <Select
-          id={`${name}-Static-Lookup-Select`}
+          id={`${name}-${id}-Lookup-Select`}
           name={name}
           isRtl={rtl}
           isMulti={multi}
-          options={lookup}
+          options={Immutable.asMutable(this.lookupData, { deep: true })}
           isLoading={loading}
           value={this.value}
           isDisabled={disabled}
@@ -191,7 +204,11 @@ class StaticLookupSelect extends Component {
           placeholder={placeholder}
           isSearchable={searchable}
           menuPlacement={menuPlacement}
-          getOptionLabel={(option) => `${option[optionLabel]}`}
+          getOptionLabel={(option) =>
+            asCallbackOptionLabel
+              ? asCallbackOptionLabel(option)
+              : `${option[optionLabel]}`
+          }
           getOptionValue={(option) => `${option[optionValue]}`}
           classNamePrefix={'select'}
           className={`static-lookup-select ${
@@ -206,9 +223,10 @@ class StaticLookupSelect extends Component {
             DropdownIndicator: this.dropdownIndicator,
             ValueContainer: this.ValueContainer,
           }}
+          // override Theme
+          // theme={theme => }
         />
-
-        <FormHelperText id={`${name}-${id}helper-text`} error={error}>
+        <FormHelperText id={`${name}-${id}-helper-text`} error={error}>
           {helperText}
         </FormHelperText>
       </FormControl>
@@ -216,14 +234,28 @@ class StaticLookupSelect extends Component {
   }
 }
 
-StaticLookupSelect.propTypes = {
+const mapStateToProps = (store) => ({
+  lookups: store.lookups,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  loadLookup: (lookup) => dispatch(LookupsActions.get(lookup)),
+});
+
+LookupSelectControl.propTypes = {
+  automationTestId: PropTypes.string,
+  id: PropTypes.string,
   name: PropTypes.string,
   label: PropTypes.string,
+  lookup: PropTypes.string,
   helperText: PropTypes.string,
   optionLabel: PropTypes.string,
   optionValue: PropTypes.string,
   placeholder: PropTypes.string,
   noOptionsMessage: PropTypes.string,
+
+  lookups: PropTypes.object,
+  selectProps: PropTypes.object,
 
   rightAdornment: PropTypes.node,
 
@@ -239,28 +271,24 @@ StaticLookupSelect.propTypes = {
   adornmentBg: PropTypes.bool,
   hideSelectedOptions: PropTypes.bool,
 
-  lookup: PropTypes.array,
-
-  selectProps: PropTypes.object,
-  styles: PropTypes.shape({
-    controle: PropTypes.object,
-    placeholder: PropTypes.object,
-    singleValue: PropTypes.object,
-  }),
-
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.array]), // Based on multi value
   menuPlacement: PropTypes.oneOf(['auto', 'bottom', 'top']),
 
   onChange: PropTypes.func,
+  loadLookup: PropTypes.func,
+  asCallbackOptionLabel: PropTypes.func,
 };
 
-StaticLookupSelect.defaultProps = {
-  id: '',
+LookupSelectControl.defaultProps = {
+  automationTestId: '',
   helperText: '',
-  optionLabel: 'name',
+  optionLabel: 'firstName',
   optionValue: 'id',
   menuPlacement: 'auto',
-  noOptionsMessage: 'No Choises Found',
+  noOptionsMessage: 'No choices found',
+
+  lookups: {},
+  selectProps: {},
 
   rtl: false,
   error: false,
@@ -272,9 +300,11 @@ StaticLookupSelect.defaultProps = {
   searchable: true,
   hideSelectedOptions: false,
 
-  selectProps: {},
-
   onChange() {},
+  loadLookup() {},
 };
 
-export { StaticLookupSelect };
+export const LookupSelect = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(LookupSelectControl);

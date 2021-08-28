@@ -13,6 +13,7 @@ const TimeSlotPage = () => {
   const [timeSlots, setTimeSlots] = useState([]);
 
   useEffect(() => {
+    console.log('tttttttttt', localStorage);
     timeSlotsEntity?.get();
   }, [timeSlotsEntity]);
 

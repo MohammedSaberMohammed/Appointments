@@ -1,3 +1,4 @@
+import { LookupSelect } from './LookupSelect';
 import { StaticLookupSelect } from './StaticLookupSelect';
 
-export { StaticLookupSelect };
+export { LookupSelect, StaticLookupSelect };

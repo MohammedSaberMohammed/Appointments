@@ -653,3 +653,44 @@ section {
   flex-direction: column;
   margin-bottom: 20px;
 }
+
+.appointment-form {
+  margin-top: 10px;
+  padding: 20px
+}
+
+.errorMessage {
+  color: red;
+  margin-bottom: 16px;
+  text-align: center;
+  width: 100%;
+  background-color: #ffefef;
+  padding: 8px 0;
+}
+
+.stepperFooter {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: '1px solid grey';
+  
+  &::after {
+    content: '';
+    display: 'block';
+    clear: 'both';
+  }
+}
+
+.stepperActionButton {
+  float: left;
+  margin-right: 8px,
+}
+
+.left {
+  float: right;
+  margin-right: 0;
+  margin-left: 8px;
+}
+
+.right {
+  float: left
+}

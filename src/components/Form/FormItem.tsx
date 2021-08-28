@@ -43,7 +43,7 @@ const FormItem = (props: Props) => {
 
     return grid;
   }, [xs, sm, md, lg, xl, fullWidth]);
-  console.log('gridProps', gridProps);
+
   return (
     <Grid item {...gridProps} className={className}>
       {children}

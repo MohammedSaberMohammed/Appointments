@@ -161,7 +161,8 @@ export const removeFailed = (state, { id, error }) =>
     error,
   });
 
-export const reset = (state, { id }) => updateState(state, id, null);
+export const reset = (state, { id }) =>
+  updateState(state, id, INITIAL_STATE_SINGLE);
 
 export const resetProp = (state, { id, prop }) =>
   updateState(state, id, {

@@ -147,7 +147,7 @@ class Entity extends React.Component {
   render() {
     const { storeId, render } = this.props;
     // Render in case there is storeId and there is store
-    console.log('storeId && this.store', storeId, this.store);
+
     if (storeId && this.store) {
       return render(this.store) || null;
     }

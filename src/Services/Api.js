@@ -10,8 +10,13 @@ const configs = {
 };
 
 const Maiia = apisauce.create({ ...configs, baseURL: ApiConfigs.baseURL.test });
+const Lookups = apisauce.create({
+  ...configs,
+  baseURL: ApiConfigs.baseURL.lookups,
+});
 
 export default {
+  lookup: (name) => Lookups.get(name),
   patients: () => Maiia.get('patients'),
   timeslots: () => Maiia.get('timeslots'),
   practitioners: () => Maiia.get('practitioners'),
