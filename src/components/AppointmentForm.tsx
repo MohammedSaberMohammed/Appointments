@@ -1,6 +1,9 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 // MUI
 import Paper from '@material-ui/core/Paper';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
 // Services
 import { isRequired } from '../Services/Validators';
 import { formatDateRange } from 'utils/date';
@@ -14,6 +17,7 @@ class AppointmentForm extends BaseFormComponent {
 
     this.initState({
       availabilities: [],
+      isAvailabilitiesLoading: false,
       startDate: '',
       endDate: '',
 
@@ -66,7 +70,9 @@ class AppointmentForm extends BaseFormComponent {
 
   onPractionerChange = ({ value: practitionerId }) => {
     // Load Availabilities
-    this.appointmentsEntity.get({ practitionerId });
+    this.setState({ isAvailabilitiesLoading: true }, () => {
+      this.availabilitiesEntity.get({ practitionerId });
+    });
   };
 
   onAvailabilitiesReceived = (data) => {
@@ -84,7 +90,12 @@ class AppointmentForm extends BaseFormComponent {
         }),
       );
 
-      this.setState({ availabilities, startDate: '', endDate: '' });
+      this.setState({
+        availabilities,
+        startDate: '',
+        endDate: '',
+        isAvailabilitiesLoading: false,
+      });
     });
   };
 
@@ -94,64 +105,100 @@ class AppointmentForm extends BaseFormComponent {
     this.setState({ startDate, endDate });
   };
 
+  onAppointmentPosted = () => {
+    this.resetFormValues(() => {
+      this.hideFormErrors(() => {
+        this.props.onReserveAppointment();
+      });
+    });
+  };
+
+  generateOption = (option) => {
+    return (
+      <ListItem style={{ padding: 0 }}>
+        <ListItemText
+          primary={`${option.firstName} ${option.lastName}`}
+          {...(option.speciality && {
+            secondary: `speciality: ${option.speciality}`,
+          })}
+        />
+      </ListItem>
+    );
+  };
+
   render() {
-    const { availabilities } = this.state;
+    const { availabilities, isAvailabilitiesLoading } = this.state;
     // Get the fields
     const { LookupSelectField, StaticLookupSelectField } = this;
-    console.log('formvalues', this.formValues);
+
     return (
-      <Entity
-        storeId="Appointments-reservation"
-        entityRef={(ref) => (this.appointmentsEntity = ref)}
-        onEntityReceived={this.onAvailabilitiesReceived}
-        render={(store) => (
-          <Paper elevation={3} className="appointment-form">
-            <FormLayout loading={store.loading}>
-              <FormItem md={6} lg={4} xl={4}>
-                <LookupSelectField
-                  name="patientId"
-                  label="patients"
-                  lookup="patients"
-                  asCallbackOptionLabel={(option) =>
-                    `${option.firstName} ${option.lastName}`
-                  }
-                />
-              </FormItem>
+      <React.Fragment>
+        {/* Availabilities Entity */}
+        <Entity
+          storeId="Availabilities-Create-Form"
+          entityRef={(ref) => (this.availabilitiesEntity = ref)}
+          onEntityReceived={this.onAvailabilitiesReceived}
+        />
+        {/* Form Entity */}
+        <Entity
+          storeId="Appointments-reservation"
+          entityRef={(ref) => (this.appointmentsEntity = ref)}
+          onEntityPosted={() => this.onAppointmentPosted()}
+          render={(store) => (
+            <Paper elevation={3} className="appointment-form">
+              <FormLayout loading={store.loading || isAvailabilitiesLoading}>
+                <FormItem md={6} lg={4} xl={4}>
+                  <LookupSelectField
+                    name="patientId"
+                    label="patients"
+                    lookup="patients"
+                    asCallbackOptionLabel={this.generateOption}
+                  />
+                </FormItem>
 
-              <FormItem md={6} lg={4} xl={4}>
-                <LookupSelectField
-                  name="practitionerId"
-                  label="practitioners"
-                  lookup="practitioners"
-                  asCallbackOptionLabel={(option) =>
-                    `${option.firstName} ${option.lastName}`
-                  }
-                  onChange={this.onPractionerChange}
-                />
-              </FormItem>
+                <FormItem md={6} lg={4} xl={4}>
+                  <LookupSelectField
+                    name="practitionerId"
+                    label="practitioners"
+                    lookup="practitioners"
+                    asCallbackOptionLabel={this.generateOption}
+                    onChange={this.onPractionerChange}
+                  />
+                </FormItem>
 
-              <FormItem md={6} lg={4} xl={4}>
-                <StaticLookupSelectField
-                  name="availabilities"
-                  label="practitioner availabilities"
-                  lookup={availabilities}
-                  optionLabel="formattedDate"
-                  onChange={this.onAvailabilitiesChange}
-                />
-              </FormItem>
-              {/* Actions */}
-              <FormItem fullWidth>
-                <FormActions
-                  actions={this.state.actions}
-                  validationMessage={this.state.formErrorMessage}
-                />
-              </FormItem>
-            </FormLayout>
-          </Paper>
-        )}
-      />
+                <FormItem md={6} lg={4} xl={4}>
+                  <StaticLookupSelectField
+                    name="availabilities"
+                    label="practitioner availabilities"
+                    lookup={availabilities}
+                    optionLabel="formattedDate"
+                    onChange={this.onAvailabilitiesChange}
+                  />
+                </FormItem>
+                {/* Actions */}
+                <FormItem fullWidth>
+                  <FormActions
+                    actions={this.state.actions}
+                    validationMessage={this.state.formErrorMessage}
+                  />
+                </FormItem>
+              </FormLayout>
+            </Paper>
+          )}
+        />
+      </React.Fragment>
     );
   }
 }
+
+AppointmentForm.propTypes = {
+  readOnlyMode: PropTypes.bool,
+  onReserveAppointment: PropTypes.func,
+};
+
+AppointmentForm.defaultProps = {
+  readOnlyMode: false,
+  onReserveAppointment() {},
+};
 
 export default AppointmentForm;

@@ -13,8 +13,16 @@ export default {
       } else {
         yield put(EntityActions.getFailed(id, res.data || {}));
       }
-    } else if (id === 'Appointments-reservation') {
+    } else if (id.indexOf('Availabilities-') > -1) {
       const res = yield call(api.availabilities, data);
+
+      if (res.ok) {
+        yield put(EntityActions.getSucceeded(id, res.data || {}));
+      } else {
+        yield put(EntityActions.getFailed(id, res.data || {}));
+      }
+    } else if (id === 'Appointments') {
+      const res = yield call(api.appointments.load, data);
 
       if (res.ok) {
         yield put(EntityActions.getSucceeded(id, res.data || {}));

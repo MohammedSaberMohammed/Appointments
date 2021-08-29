@@ -35,3 +35,21 @@
 .upper-indicator {
   transform: rotate(180deg),
 }
+
+// ============ Label And Value =========
+.labelAndValue {
+  background-color: #edededcc;
+  padding: 8px;
+  min-height: auto;
+  box-sizing: border-box;
+}
+
+.labelAndValueLabel {
+  color: #9aa1a9;
+  font-size: 13px
+}
+
+.labelAndValueValue {
+  font-weight: bold;
+  font-size: 17px
+}

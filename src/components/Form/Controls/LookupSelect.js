@@ -84,7 +84,8 @@ class LookupSelectControl extends React.Component {
     const { value, optionValue } = this.props;
 
     const defaultValue = find(this.lookupData, [`${optionValue}`, value]);
-    return defaultValue;
+
+    return defaultValue || '';
   }
 
   get lookupData() {
@@ -92,22 +93,6 @@ class LookupSelectControl extends React.Component {
 
     return get(lookups, `${lookup}.data`, []);
   }
-
-  ValueContainer = ({ children, ...props }) => {
-    const { rightAdornment } = this.props;
-    return (
-      components.ValueContainer && (
-        <components.ValueContainer {...props}>
-          {!!children && rightAdornment && (
-            <div style={{ minWidth: 35, textAlign: 'center' }}>
-              {rightAdornment}
-            </div>
-          )}
-          {children}
-        </components.ValueContainer>
-      )
-    );
-  };
 
   get selectStyles() {
     const { rightAdornment } = this.props;
@@ -125,7 +110,7 @@ class LookupSelectControl extends React.Component {
           backgroundColor: isSelected ? '#BA0D2F' : '#fff',
           fontWeight: isSelected ? 600 : 'normal',
 
-          padding: 20,
+          padding: 15,
           cursor: 'pointer',
           ':hover': {
             background: isSelected ? '#BA0D2F' : '#d4355478',
@@ -202,6 +187,7 @@ class LookupSelectControl extends React.Component {
           // inputValue={} ----> searchInputValue
           isClearable={clearable}
           placeholder={placeholder}
+          isSelected={false}
           isSearchable={searchable}
           menuPlacement={menuPlacement}
           getOptionLabel={(option) =>
@@ -221,10 +207,7 @@ class LookupSelectControl extends React.Component {
           // override components
           components={{
             DropdownIndicator: this.dropdownIndicator,
-            ValueContainer: this.ValueContainer,
           }}
-          // override Theme
-          // theme={theme => }
         />
         <FormHelperText id={`${name}-${id}-helper-text`} error={error}>
           {helperText}
