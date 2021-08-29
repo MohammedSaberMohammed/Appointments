@@ -25,8 +25,10 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 class AppointmentDialog extends BaseFormComponent {
-  constructor(props) {
-    super(props);
+  singleAppointmentEntity;
+  availabilitiesEntity;
+  constructor() {
+    super();
 
     this.initState({
       availabilities: [],

@@ -12,8 +12,11 @@ import Entity from './Entity';
 import { FormLayout, FormItem, BaseFormComponent, FormActions } from './Form';
 
 class AppointmentForm extends BaseFormComponent {
-  constructor(props) {
-    super(props);
+  appointmentsEntity;
+  availabilitiesEntity;
+
+  constructor() {
+    super();
 
     this.initState({
       availabilities: [],

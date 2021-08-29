@@ -20,6 +20,22 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       res.status(200).json(appointment);
       break;
     }
+    case 'PUT': {
+      const { id, patientId, practitionerId, startDate, endDate } = req.body;
+      const appointment = await prisma.appointment.update({
+        where: {
+          id: parseInt(id),
+        },
+        data: {
+          patientId: parseInt(patientId),
+          practitionerId: parseInt(practitionerId),
+          startDate: startDate,
+          endDate: endDate,
+        },
+      });
+      res.status(200).json(appointment);
+      break;
+    }
     case 'DELETE': {
       const { id } = req.body;
       const deletedAppointment = await prisma.appointment.delete({
