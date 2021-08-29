@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import AppointmentForm from 'components/AppointmentForm';
 import AppointmentList from 'components/AppointmentList';
 import Section from 'components/Section';
@@ -65,7 +65,7 @@ const AppointmentsPage = () => {
           title="Appointment Form"
           className="appointment__form"
         >
-          <AppointmentForm onReserveAppointment={() => loadAppointments()} />
+          <AppointmentForm onReserveAppointment={loadAppointments} />
         </Section>
         <Section
           name="appointment-list"
@@ -80,6 +80,7 @@ const AppointmentsPage = () => {
               <AppointmentList
                 entityStore={store}
                 appointments={appointments}
+                refreshList={loadAppointments}
               />
             )}
           />

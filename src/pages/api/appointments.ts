@@ -7,7 +7,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       const appointments = await prisma.appointment.findMany();
       res.status(200).json(appointments);
       break;
-    case 'POST':
+    case 'POST': {
       const { patientId, practitionerId, startDate, endDate } = req.body;
       const appointment = await prisma.appointment.create({
         data: {
@@ -19,22 +19,16 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       });
       res.status(200).json(appointment);
       break;
+    }
+    case 'DELETE': {
+      const { id } = req.body;
+      const deletedAppointment = await prisma.appointment.delete({
+        where: {
+          id,
+        },
+      });
+      res.status(200).json(deletedAppointment);
+      break;
+    }
   }
 };
-
-// case 'UPDATE': {
-//   const { patientId, practitionerId, startDate, endDate } = JSON.parse(
-//     req.body,
-//   );
-//   const appointment = await prisma.appointment.update({
-//     where: {
-//       // id: parseInt(patientId),
-//     },
-//     data: {
-//       startDate: startDate,
-//       endDate: endDate,
-//     },
-//   });
-//   res.status(200).json(appointment);
-//   break;
-// }

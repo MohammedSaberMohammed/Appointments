@@ -50,6 +50,8 @@ const Action = (props: Props) => {
     return classnames('stepperActionButton', {
       right,
       left,
+      theme_primary_button: primaryAction,
+      theme_secondary_button: !primaryAction,
     });
   }, [left, right]);
 

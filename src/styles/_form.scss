@@ -15,7 +15,20 @@
   filter: blur(4px)
 }
 
+.form-dialog-layout {
+  padding: 50px;
+  margin-top: 50px !important
+}
 
+.dialog-toolbar {
+  display: flex;
+  justify-content: space-between;
+}
+
+.dialog-action-wrapper {
+  padding: 15px;
+  margin-bottom: 10px
+}
 // ================ Form Controls ======
 #dropdown-label {
   position: static;

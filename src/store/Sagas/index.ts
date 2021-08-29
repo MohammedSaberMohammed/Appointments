@@ -13,6 +13,8 @@ export default function* rootSaga() {
     // =========== Entity  =============
     takeEvery(EntityTypes.GET, entitySaga.get),
     takeEvery(EntityTypes.POST, entitySaga.post),
+    takeEvery(EntityTypes.PUT, entitySaga.put),
+    takeEvery(EntityTypes.DELETE, entitySaga.delete),
     // Lookups
     takeEvery(LookupsTypes.GET, lookupsSagas.get),
   ]);

@@ -17,6 +17,7 @@ const Lookups = apisauce.create({
 
 export default {
   lookup: (name) => Lookups.get(name),
+
   patients: () => Maiia.get('patients'),
   timeslots: () => Maiia.get('timeslots'),
   practitioners: () => Maiia.get('practitioners'),
@@ -25,5 +26,7 @@ export default {
   appointments: {
     load: () => Maiia.get('appointments'),
     save: (data) => Maiia.post('appointments', data),
+    update: (data) => Maiia.put('appointments', data),
+    delete: (data) => Maiia.delete('appointments', data),
   },
 };

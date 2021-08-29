@@ -6,8 +6,8 @@ import 'styles/main.scss';
 
 const theme = createMuiTheme({
   palette: {
-    primary: { main: '#000' },
-    secondary: { main: '#FFF' },
+    primary: { main: '#ba0d2f' },
+    secondary: { main: '#dc99a6' },
   },
 });
 

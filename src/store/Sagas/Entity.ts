@@ -35,11 +35,37 @@ export default {
     if (id === 'Appointments-reservation') {
       const res = yield call(api.appointments.save, data);
 
-      console.log('sav', res);
       if (res.ok) {
         yield put(EntityActions.postSucceeded(id, res.data));
       } else {
         yield put(EntityActions.postFailed(id, res.data || {}));
+      }
+    }
+  },
+  *put({ id, data }) {
+    if (id === 'Single-Appointment') {
+      const res = yield call(api.appointments.update, data);
+
+      if (res.ok) {
+        yield put(EntityActions.putSucceeded(id, res.data));
+      } else {
+        yield put(EntityActions.putFailed(id, res.data));
+      }
+    }
+  },
+  *delete({ id, data }) {
+    if (id === 'Single-Appointment') {
+      const res = yield call(api.appointments.delete, data);
+
+      if (res.ok) {
+        yield put(EntityActions.deleteSucceeded(id, res.data));
+      } else {
+        yield put(
+          EntityActions.deleteFailed(
+            id,
+            res.data || 'Appointment Deleted Error',
+          ),
+        );
       }
     }
   },

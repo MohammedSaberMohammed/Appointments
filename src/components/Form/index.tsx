@@ -1,5 +1,5 @@
-import { FormLayout } from './FormLayout.tsx';
-import { FormItem } from './FormItem.tsx';
+import { FormLayout } from './FormLayout';
+import { FormItem } from './FormItem';
 import FormActions from './FormActions';
 import { BaseFormComponent } from './BaseFormComponent';
 

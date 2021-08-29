@@ -1,4 +1,5 @@
 import React, { ReactNode } from 'react';
+import classNames from 'classnames';
 
 import Grid from '@material-ui/core/Grid';
 
@@ -17,19 +18,19 @@ const defaultProps = {
 };
 
 const FormLayout = (props: Props) => {
-  const { loading, children } = props;
+  const { loading, children, className } = props;
 
   return (
     <React.Fragment>
       {loading && (
-        <div className={'loading'}>
+        <div className={`loading ${className}`}>
           <Loading />
         </div>
       )}
 
       <Grid
         container
-        className={`${loading ? 'blurry-grid' : ''} `}
+        className={classNames(className, { 'blurry-grid': loading })}
         spacing={2}
       >
         {children}

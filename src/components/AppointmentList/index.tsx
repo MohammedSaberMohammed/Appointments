@@ -1,18 +1,24 @@
-import React from 'react';
+import React, { useState, useCallback } from 'react';
 // Services
 import { formatDateRange } from 'utils/date';
+// MUI
+import Button from '@material-ui/core/Button';
+
 // Components
-import Card from './MediaCard';
-import { FormLayout, FormItem } from './Form';
-import { LabelAndValue, LookupString } from './Form/Controls';
+import Card from 'components/MediaCard';
+import AppointmentDialog from './AppointmentDialog';
+import { FormLayout, FormItem } from 'components/Form';
+import { LabelAndValue, LookupString } from 'components/Form/Controls';
 
 type Props = {
   appointments: any[];
+  refreshList: () => void;
   entityStore?: Record<string, unknown>;
 };
 
 const AppointmentList = (props: Props) => {
-  const { appointments, entityStore } = props;
+  const [selectedAppointment, setSelectedAppointment] = useState(null);
+  const { appointments, entityStore, refreshList } = props;
 
   const renderReadOnlyForm = (appointment) => {
     const { practitionerId, patientId, startDate, endDate } = appointment;
@@ -44,12 +50,48 @@ const AppointmentList = (props: Props) => {
             })}
           />
         </FormItem>
+
+        <FormItem fullWidth>
+          <Button
+            onClick={() => onEditAppointment(appointment)}
+            color={'primary'}
+            variant={'outlined'}
+            fullWidth
+          >
+            {'Edit'}
+          </Button>
+        </FormItem>
       </FormLayout>
     );
   };
 
+  const onEditAppointment = useCallback(
+    (appointment) => {
+      setSelectedAppointment(appointment);
+    },
+    [setSelectedAppointment],
+  );
+
+  const onCloseDialog = useCallback(() => {
+    setSelectedAppointment(null);
+  }, [setSelectedAppointment]);
+
+  const onCancelAndRefetch = () => {
+    onCloseDialog();
+    refreshList();
+  };
+
   return (
     <React.Fragment>
+      {/* Render Preview Dialog */}
+      {selectedAppointment && (
+        <AppointmentDialog
+          appointment={selectedAppointment}
+          onCloseDialog={onCloseDialog}
+          cancelAndRefetch={onCancelAndRefetch}
+        />
+      )}
+
       <FormLayout loading={entityStore.loading}>
         {appointments.map((appointment) => (
           <FormItem key={appointment.id} lg={4} xl={4}>
