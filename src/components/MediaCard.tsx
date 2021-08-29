@@ -69,7 +69,7 @@ const CardMediaPreviewer = (props: Props) => {
   } = props;
 
   const cardHeaderProps = useMemo(() => {
-    const props = {};
+    const props: { avatar?: ReactNode; action?: ReactNode } = {};
 
     if (avatarSrc) {
       props.avatar = (

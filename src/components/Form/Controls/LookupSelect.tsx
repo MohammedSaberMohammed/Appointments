@@ -44,7 +44,8 @@ type Props = {
   hideSelectedOptions?: boolean;
 
   value: any;
-  menuPlacement?: 'auto' | 'bottom' | 'top';
+  // menuPlacement: 'auto' | 'bottom' | 'top';
+  menuPlacement: string;
 
   onChange?: (...params) => void;
   loadLookup: (name: string) => void;

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 // Lodash
 import get from 'lodash/get';
@@ -7,47 +8,12 @@ import EntityActions from '../../store/ActionsAndReducers/Entity';
 // Utils
 import MutateResponse from './Utils';
 
-type Store = {
-  received: boolean;
-  posted: boolean;
-  updated: boolean;
-  deleted: boolean;
-  loading: boolean;
-  error: Record<string, unknown>;
-  responseFromGet: Record<string, unknown>;
-  responseFromPost: Record<string, unknown>;
-  responseFromUpdate: Record<string, unknown>;
-  responseFromDelete: Record<string, unknown>;
-};
+/**
+ * Random Component
+ * @augments {Component<Props, State>}
+ */
 
-type Props = {
-  storeId: string;
-
-  data?: Record<string, unknown>;
-  entityStore?: Store;
-
-  get?: (storeId: string, data: Record<string, unknown>) => void;
-  put?: (storeId: string, data: Record<string, unknown>) => void;
-  post?: (storeId: string, data: Record<string, unknown>) => void;
-  delete?: (storeId: string, data: Record<string, unknown>) => void;
-  update?: (storeId: string, data: Record<string, unknown>) => void;
-  reset?: (storeId: string) => void;
-  render?: undefined | ((store: Store) => React.ReactNode);
-  register?: (storeId: string) => void;
-  resetProp?: (storeId: string, prop: string) => void;
-  entityRef?: (ref: any) => void;
-  onEntityReceived?: (data: Record<string, unknown>) => void;
-  onEntityPosted?: (data: Record<string, unknown>) => void;
-  onEntityDidPut?: (data: Record<string, unknown>) => void;
-  onEntityDeleted?: (data: Record<string, unknown>) => void;
-  resetResponseProps?: (storeId: string) => void;
-  onEntityReceivedError?: (data: Record<string, unknown>) => void;
-  onEntityPostedError?: (data: Record<string, unknown>) => void;
-  onEntityUpdatedError?: (data: Record<string, unknown>) => void;
-  onEntityDeletedError?: (data: Record<string, unknown>) => void;
-};
-
-class Entity extends React.Component<Props> {
+class Entity extends React.Component {
   componentDidMount() {
     const { register, entityRef } = this.props;
 
@@ -182,13 +148,67 @@ class Entity extends React.Component<Props> {
     const { storeId, render } = this.props;
     // Render in case there is storeId and there is store
 
-    if (storeId && this.store && render) {
-      return render(this.store);
+    if (storeId && this.store) {
+      return render(this.store) || null;
     }
 
     return null;
   }
 }
+
+Entity.propTypes = {
+  storeId: PropTypes.string,
+
+  data: PropTypes.object,
+  entityStore: PropTypes.object,
+
+  get: PropTypes.func,
+  put: PropTypes.func,
+  post: PropTypes.func,
+  reset: PropTypes.func,
+  render: PropTypes.func,
+  delete: PropTypes.func,
+  update: PropTypes.func,
+  register: PropTypes.func,
+  resetProp: PropTypes.func,
+  entityRef: PropTypes.func,
+  onEntityReceived: PropTypes.func,
+  onEntityPosted: PropTypes.func,
+  onEntityDidPut: PropTypes.func,
+  onEntityDeleted: PropTypes.func,
+  resetResponseProps: PropTypes.func,
+  onEntityReceivedError: PropTypes.func,
+  onEntityPostedError: PropTypes.func,
+  onEntityUpdatedError: PropTypes.func,
+  onEntityDeletedError: PropTypes.func,
+};
+
+Entity.defaultProps = {
+  storeId: '',
+
+  data: {},
+  entityStore: {},
+
+  get() {},
+  put() {},
+  post() {},
+  reset() {},
+  render() {},
+  delete() {},
+  update() {},
+  register() {},
+  resetProp() {},
+  entityRef() {},
+  onEntityPosted() {},
+  onEntityReceived() {},
+  onEntityDidPut() {},
+  onEntityDeleted() {},
+  onEntityReceivedError() {},
+  onEntityPostedError() {},
+  onEntityUpdatedError() {},
+  onEntityDeletedError() {},
+  resetResponseProps() {},
+};
 
 const mapStateToProps = (store) => ({
   entityStore: store.entity,

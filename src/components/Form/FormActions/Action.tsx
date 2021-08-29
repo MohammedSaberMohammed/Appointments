@@ -3,11 +3,13 @@ import classnames from 'classnames';
 
 import Button from '@material-ui/core/Button';
 
+type Color = 'inherit' | 'primary' | 'secondary' | 'default';
+
 type Props = {
   variant?: string;
   label?: string;
   disabled?: boolean;
-  color?: string;
+  color?: Color;
   styles?: Record<string, unknown>;
   left?: boolean;
   right?: boolean;
@@ -20,7 +22,7 @@ type Props = {
 
 const defaultProps = {
   label: '',
-  color: 'secondary',
+  // color: 'secondary',
 
   disabled: false,
   primaryAction: false,

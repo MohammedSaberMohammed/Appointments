@@ -2,15 +2,30 @@ import React, { ReactNode, useMemo } from 'react';
 
 import Grid from '@material-ui/core/Grid';
 
+export type GridSize =
+  | 'auto'
+  | 1
+  | 2
+  | 3
+  | 4
+  | 5
+  | 6
+  | 7
+  | 8
+  | 9
+  | 10
+  | 11
+  | 12;
+
 type Props = {
   children?: ReactNode;
   className?: string;
 
-  xs?: number;
-  sm?: number;
-  md?: number;
-  lg?: number;
-  xl?: number;
+  xs?: boolean | GridSize;
+  sm?: boolean | GridSize;
+  md?: boolean | GridSize;
+  lg?: boolean | GridSize;
+  xl?: boolean | GridSize;
 
   fullWidth: boolean;
 } & typeof defaultProps;

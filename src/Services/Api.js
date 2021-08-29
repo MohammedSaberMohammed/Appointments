@@ -19,12 +19,12 @@ export default {
   lookup: (name) => Lookups.get(name),
 
   patients: () => Maiia.get('patients'),
-  timeslots: () => Maiia.get('timeslots'),
+  timeslots: (data) => Maiia.get('timeslots'),
   practitioners: () => Maiia.get('practitioners'),
   availabilities: ({ practitionerId }) =>
     Maiia.get(`availabilities?practitionerId=${practitionerId}`),
   appointments: {
-    load: () => Maiia.get('appointments'),
+    load: (data) => Maiia.get('appointments'),
     save: (data) => Maiia.post('appointments', data),
     update: (data) => Maiia.put('appointments', data),
     delete: (data) => Maiia.delete('appointments', data),

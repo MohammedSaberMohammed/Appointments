@@ -34,6 +34,7 @@ const { Types, Creators } = createActions(
 );
 
 export const EntityTypes = Types;
+export const DefaultActionTypes = Types;
 export default Creators;
 
 /* ------------- Initial State ------------- */
