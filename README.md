@@ -28,6 +28,6 @@ If you favor another text editor providing a similar API feel free to modify `sr
 - [x] Custom Form Flow ( BaseForm - Controlers - validators )
 - [x] Cashing stratiegy ( when calling static data like patients - practioners and it will only be loaded on time in the entire App )
 - [x] Design grid system ( FormLayout - FormItem ).
-- [] Modal to perform CRUD on Each Appointment.
-- [] Update Prisma API's to use CRUD.
+- [ ] Modal to perform CRUD on Each Appointment.
+- [ ] Update Prisma API's to use CRUD.
 
