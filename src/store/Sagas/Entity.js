@@ -34,6 +34,8 @@ export default {
   *post({ id, data }) {
     if (id === 'Appointments-reservation') {
       const res = yield call(api.appointments.save, data);
+
+      console.log('sav', res);
       if (res.ok) {
         yield put(EntityActions.postSucceeded(id, res.data));
       } else {

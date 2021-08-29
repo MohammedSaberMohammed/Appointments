@@ -24,6 +24,6 @@ export default {
     Maiia.get(`availabilities?practitionerId=${practitionerId}`),
   appointments: {
     load: () => Maiia.get('appointments'),
-    save: (data) => Maiia.get('appointments', data),
+    save: (data) => Maiia.post('appointments', data),
   },
 };
