@@ -21,9 +21,13 @@ The instructions work best with Visual Studio Code which provides an API to open
 If you favor another text editor providing a similar API feel free to modify `src/components/EditorLink.tsx` to suit your needs.
 
 ## Features & Enhancements
-- [x] Store Enhancement
-- [x] Redux-Saga
+- [x] Store Enhancement.
+- [x] Redux-Saga.
+- [x] Entity Component ( responsible for all apis in the component ).
+- [x] API Middleware alongside with redux-saga with api folder combination ( especially in Lookup ).
 - [x] Custom Form Flow ( BaseForm - Controlers - validators )
 - [x] Cashing stratiegy ( when calling static data like patients - practioners and it will only be loaded on time in the entire App )
-- [x] Design grid system ( FormLayout - FormItem ) 
+- [x] Design grid system ( FormLayout - FormItem ).
+- [] Modal to perform CRUD on Each Appointment.
+- [] Update Prisma API's to use CRUD.
 
