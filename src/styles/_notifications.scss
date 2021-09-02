@@ -1,0 +1,29 @@
+#success-notification {
+  background-color: #4caf50
+}
+
+#error-notification {
+  background-color: #f44336
+}
+
+#info-notification {
+  background-color: #2196f3
+}
+
+#warning-notification {
+  background-color: #ff9800
+}
+
+.notification-message {
+  display: flex;
+  align-items: center
+}
+
+.notification-icon {
+  font-size: 20
+}
+
+.notification-icon-variant {
+  opacity: 0.9;
+  margin-right: 8px
+}

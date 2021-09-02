@@ -18,11 +18,14 @@ import { BaseFormComponent, FormLayout, FormItem } from 'components/Form';
 import { LabelAndValue } from 'components/Form/Controls';
 
 import { isRequired } from 'Services/Validators';
+import Notifications from 'Services/Notifications';
 import { Paper } from '@material-ui/core';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
+
+const DMZObject = Object.create(null);
 
 class AppointmentDialog extends BaseFormComponent {
   singleAppointmentEntity;
@@ -158,8 +161,26 @@ class AppointmentDialog extends BaseFormComponent {
     );
   };
 
+  notifyActionError = (isUpdating = false) => {
+    Notifications.notify(
+      'error',
+      `Failed ${isUpdating ? 'updating' : 'deleting'} the appointment`,
+    );
+  };
+
+  notifyActionSuccess = (isUpdating = false) => {
+    const { cancelAndRefetch } = this.props;
+
+    Notifications.notify(
+      'success',
+      `Appointment ${isUpdating ? 'updated' : 'deleted'} successfully`,
+    );
+
+    cancelAndRefetch();
+  };
+
   render() {
-    const { onCloseDialog, cancelAndRefetch } = this.props;
+    const { onCloseDialog } = this.props;
     const { selectedDate, availabilities, isAvailabilitiesLoading } =
       this.state;
     // Get the fields
@@ -177,8 +198,10 @@ class AppointmentDialog extends BaseFormComponent {
         <Entity
           storeId="Single-Appointment"
           entityRef={(ref) => (this.singleAppointmentEntity = ref)}
-          onEntityDidPut={cancelAndRefetch}
-          onEntityDeleted={cancelAndRefetch}
+          onEntityDidPut={this.notifyActionSuccess.bind(DMZObject, true)}
+          onEntityDeleted={this.notifyActionSuccess.bind(DMZObject, false)}
+          onEntityDeletedError={this.notifyActionError.bind(DMZObject, false)}
+          onEntityUpdatedError={this.notifyActionError.bind(DMZObject, true)}
           render={(store) => (
             <Dialog
               open={true}

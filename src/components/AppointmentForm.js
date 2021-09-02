@@ -6,6 +6,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 // Services
 import { isRequired } from '../Services/Validators';
+import Notifications from '../Services/Notifications';
 import { formatDateRange } from 'utils/date';
 // Components
 import Entity from './Entity';
@@ -111,6 +112,7 @@ class AppointmentForm extends BaseFormComponent {
   onAppointmentPosted = () => {
     this.resetFormValues(() => {
       this.hideFormErrors(() => {
+        Notifications.notify('success', 'Appointment Reserved Successfully.');
         this.props.onReserveAppointment();
       });
     });

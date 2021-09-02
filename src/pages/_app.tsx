@@ -1,6 +1,7 @@
 import { createMuiTheme, ThemeProvider } from '@material-ui/core';
 import { Layout } from 'components/Layout';
 import { Provider } from 'react-redux';
+import Notifications from './Notifications';
 import store from 'store';
 import 'styles/main.scss';
 
@@ -16,6 +17,7 @@ function MyApp({ Component, pageProps }) {
     <Provider store={store}>
       <ThemeProvider theme={theme}>
         <Layout title={Component.pageTitle} subtitle={Component.pageSubtitle}>
+          <Notifications />
           <Component {...pageProps} />
         </Layout>
       </ThemeProvider>
