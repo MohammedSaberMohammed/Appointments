@@ -10,19 +10,24 @@ import AppointmentDialog from './AppointmentDialog';
 import { FormLayout, FormItem } from 'components/Form';
 import { LabelAndValue, LookupString } from 'components/Form/Controls';
 
+type dynamicData = {
+  [key: string]: any;
+};
+
 type Store = {
   received: boolean;
   posted: boolean;
   updated: boolean;
   deleted: boolean;
   loading: boolean;
-  error: Record<string, unknown>;
-  responseFromGet: Record<string, unknown>;
-  responseFromPost: Record<string, unknown>;
-  responseFromUpdate: Record<string, unknown>;
-  responseFromDelete: Record<string, unknown>;
-};
+  error: dynamicData;
+  data: dynamicData;
 
+  responseFromGet: dynamicData;
+  responseFromPost: dynamicData;
+  responseFromPut: dynamicData;
+  responseFromDelete: dynamicData;
+};
 type Props = {
   appointments: any[];
   refreshList: () => void;

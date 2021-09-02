@@ -10,6 +10,7 @@
     "postinstall": "husky install && prisma generate",
     "start": "next start",
     "test": "cypress open",
+    "export": "next export",
     "seed-db": "ts-node --project tsconfig.script.json script.ts"
   },
   "dependencies": {
